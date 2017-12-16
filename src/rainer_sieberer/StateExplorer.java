@@ -11,7 +11,6 @@ import java.util.Stack;
 
 import java.io.PrintStream;
 
-
 public class StateExplorer <S extends State>
 {
 
@@ -22,7 +21,7 @@ public class StateExplorer <S extends State>
 		this.actions = actions;
 	}
 
-	public Collection<Action<S>> solve ( S init, int goal, PrintStream out )
+	public Collection<Action<S>> solve ( S init, int goal )
 	{
 		Set<S> explored = new HashSet<S>();
 		Map<S,Source<S>> sources = new HashMap<S,Source<S>>();
@@ -48,7 +47,7 @@ public class StateExplorer <S extends State>
 
 					if ( nextState.containsGoal( goal ) )
 					{
-						return backTrace( nextState, sources, out );
+						return backTrace( nextState, sources );
 					}
 					
 				}
@@ -60,7 +59,7 @@ public class StateExplorer <S extends State>
 		return null;
 	}
 
-	public Collection<Action<S>> backTrace ( S finalState, Map<S,Source<S>> sources, PrintStream out )
+	public Collection<Action<S>> backTrace ( S finalState, Map<S,Source<S>> sources )
 	{
 		Stack<Action<S>> stack = new Stack<Action<S>>();
 		LinkedList<Action<S>> actions = new LinkedList<Action<S>>();
@@ -78,6 +77,19 @@ public class StateExplorer <S extends State>
 		}
 
 		return actions;
+	}
+
+	public int solve ( S init, int goal, PrintStream out )
+	{
+		Collection<Action<S>> actions = solve( init, goal );
+		S currentState = init;
+		for ( Action<S> currentAction: actions )
+		{
+			out.print( currentState.getInfo() + " -> " + currentAction.getLabel() + " -> ");
+			currentState = currentAction.performOn( currentState );
+			out.println( currentState.getInfo() );
+		}
+		return actions.size();
 	}
 
 }

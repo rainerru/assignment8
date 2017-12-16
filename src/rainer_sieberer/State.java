@@ -31,4 +31,11 @@ public interface State
 	 */
 	public <S extends State> boolean isAlreadyExplored ( Set<S> explored );
 
+	/**
+	 * constructor
+	 * @param explored		bla456567478
+	 * @return						asdfwre
+	 */
+	public String getInfo ();
+
 }
