@@ -81,7 +81,11 @@ public class StateExplorer <S extends State>
 
 	public int solve ( S init, int goal, PrintStream out )
 	{
+		if ( init.containsGoal( goal ) )
+			return 0;
 		Collection<Action<S>> actions = solve( init, goal );
+		if ( actions == null || actions.size() == 0 )
+			return -1;
 		S currentState = init;
 		for ( Action<S> currentAction: actions )
 		{
